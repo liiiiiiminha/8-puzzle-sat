@@ -44,7 +44,7 @@ def regras_transicao(p, simbolo):
                                     cond_0,
                                     cond_v,
                                     cond_acao,
-                                    simbolo(f"{p}_A_{dir2}") * -1  # nega outras ações
+                                    -simbolo(f"{p}_A_{dir2}")  # nega outras ações
                                 ])
                 # AÇÃO INVÁLIDA — movimento fora do tabuleiro
                 else:
