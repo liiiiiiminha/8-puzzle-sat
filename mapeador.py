@@ -17,6 +17,11 @@ def gerar_simbolos_estado(p):
                 nome = f"{p}_P_{linha}_{coluna}_{valor}"
                 simbolo(nome)
 
+def gerar_simbolos_acao(p):
+    for direcao in ["C", "B", "E", "D"]:
+        nome = f"{p}_A_{direcao}"
+        simbolo(nome)
+
 def mostrar_simbolos(n):
     print(f"Símbolos gerados para o estado {n}:")
     for nome, codigo in list(mapeamento.items())[:83]:  # Mostra os 10 primeiros

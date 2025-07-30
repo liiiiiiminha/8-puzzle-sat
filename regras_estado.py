@@ -22,4 +22,14 @@ def regras_estado(p, simbolo):
         for idx1 in range(len(simbolos)):
             for idx2 in range(idx1 + 1, len(simbolos)):
                 clausulas.append([-simbolos[idx1], -simbolos[idx2]])
+    
+    simbolos_zero = [simbolo(f"{p}_P_{i}_{j}_0") for i in range(1, 4) for j in range(1, 4)]
+
+    # Pelo menos uma posição tem o 0
+    clausulas.append(simbolos_zero)
+
+    # No máximo uma (pares negativos)
+    for i in range(len(simbolos_zero)):
+        for j in range(i + 1, len(simbolos_zero)):
+            clausulas.append([-simbolos_zero[i], -simbolos_zero[j]])
     return clausulas
