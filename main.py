@@ -3,9 +3,9 @@ from mapeador import *
 import random
 import copy
 
-# Embaralha o estado final aplicando movimentos válidos do 0
 def embaralhar_estado(base, passos=10):
     def pos_zero(tab):
+        # encontra a posição do zero no tabuleiro
         for i in range(3):
             for j in range(3):
                 if tab[i][j] == 0:
@@ -25,7 +25,7 @@ def embaralhar_estado(base, passos=10):
     return estado
 
 def main():
-    # Estado final padrão
+    # estado final padrão
     base = [
         [0, 1, 2],
         [3, 4, 5],
@@ -34,17 +34,18 @@ def main():
 
     estado_inicial = embaralhar_estado(base, passos=10)
 
-    print("🧩 Estado embaralhado:")
+    print("Estado embaralhado!!!")
     for linha in estado_inicial:
         print(linha)
 
+    # chama o solver
     modelo, passos = resolver_puzzle(estado_inicial, MAX_PASSOS=20)
 
     if modelo:
-        estados, acoes = interpretar_modelo(modelo, mapeamento)
-        estados[1] = [[str(valor) for valor in linha] for linha in estado_inicial]
-        
+        estados, acoes = interpretar_modelo(modelo, mapeamento)                
         passos_ordenados = sorted(estados.keys())
+
+        # printa os estados e ações feitas
 
         for idx in range(len(passos_ordenados) - 1):
             k = passos_ordenados[idx]
@@ -53,7 +54,7 @@ def main():
             for linha in estados[k]:
                 print(" ".join(linha))
 
-            # ✅ Mostra a ação correta feita para gerar o estado seguinte
+            # printa a ação feita
             if k in acoes:
                 print(f"Ação realizada: {acoes[k]}")
 
@@ -62,14 +63,13 @@ def main():
                 print(" ".join(linha))
         print(" → ".join(acoes[k] for k in sorted(acoes)))
 
-        print("\n📦 Estado final (objetivo):")
+        print("\nEstado final (objetivo):")
         for linha in estados[passos_ordenados[-1]]:
             print(" ".join(linha))
 
-        print("\n🧭 Sequência de ações para resolver (desconsiderar a último):")
+        print("\nSequência de ações para resolver (desconsiderar a último):")
         print(" → ".join(acoes[k] for k in sorted(acoes)))
     else:
-        print("❌ Nenhuma solução encontrada.")
+        print("Nenhuma solução encontrada.")
 
-if __name__ == "__main__":
-    main()
+main()

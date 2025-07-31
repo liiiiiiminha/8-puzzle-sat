@@ -2,10 +2,10 @@ def regras_transicao(p, simbolo):
     clausulas = []
 
     direcoes = {
-        "C": (-1, 0),  # Cima
-        "B": (1, 0),   # Baixo
-        "E": (0, -1),  # Esquerda
-        "D": (0, 1)    # Direita
+        "C": (-1, 0),  # cima
+        "B": (1, 0),   # baixo
+        "E": (0, -1),  # esquerda
+        "D": (0, 1)    # direita
     }
 
     for i in range(1, 4):       # linhas
@@ -17,16 +17,16 @@ def regras_transicao(p, simbolo):
                 cond_acao = -simbolo(f"{p}_A_{direcao}")
                 cond_0 = -simbolo(f"{p}_P_{i}_{j}_0")
 
-                # AÇÃO VÁLIDA — movimento dentro do tabuleiro
+                # garante movimento dentro do tabuleiro
                 if 1 <= ni <= 3 and 1 <= nj <= 3:
                     for v in range(1, 9):  # peça a ser trocada (não o 0)
                         cond_v = -simbolo(f"{p}_P_{ni}_{nj}_{v}")
 
-                        # Troca: 0 vai para (ni, nj), v vem para (i, j)
+                        # troca a pos do 0 com a pos do valor ij
                         clausulas.append([cond_acao, cond_0, cond_v, simbolo(f"{p+1}_P_{ni}_{nj}_0")])
                         clausulas.append([cond_acao, cond_0, cond_v, simbolo(f"{p+1}_P_{i}_{j}_{v}")])
 
-                        # PRESERVAR o restante do tabuleiro
+                        # mantém o restante dos valores do tabuleiro
                         for x in range(1, 4):
                             for y in range(1, 4):
                                 if (x, y) not in [(i, j), (ni, nj)]:
@@ -46,9 +46,8 @@ def regras_transicao(p, simbolo):
                                     cond_acao,
                                     -simbolo(f"{p}_A_{dir2}")  # nega outras ações
                                 ])
-                # AÇÃO INVÁLIDA — movimento fora do tabuleiro
+                # movimento fora do tabuleiro, repetir o mesmo estado
                 else:
-                    # Se tentar executar uma ação inválida, repetir TODO o estado
                     for x in range(1, 4):
                         for y in range(1, 4):
                             for valor in range(9):

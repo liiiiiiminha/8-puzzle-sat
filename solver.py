@@ -8,6 +8,7 @@ from regras_transicao import *
 
 MAX_PASSOS = 20
 
+# converte um estado do tabuleiro para cláusulas CNF no passo p
 def estado_para_clausulas(estado, p, simbolo):
     clausulas = []
     for i in range(1, 4):       # linhas 1 a 3
@@ -45,11 +46,13 @@ def estado_inicial(p, simbolo):
             clausulas.append([simbolo(f"{p}_P_{i}_{j}_{v}")])
     return clausulas
 
+#solver
 def resolver_puzzle(estado_inicial, MAX_PASSOS):
         
         for N in range(1, MAX_PASSOS + 1):
             cnf = CNF()
-
+            
+            # para cada passo, adiciona as regras de estado, ação e transição ao CNF
             for p in range(1, N  + 1):
                 gerar_simbolos_estado(p)
                 gerar_simbolos_acao(p)
@@ -66,7 +69,7 @@ def resolver_puzzle(estado_inicial, MAX_PASSOS):
                     valor = estado_inicial[i - 1][j - 1]
                     cnf.append([simbolo(f"1_P_{i}_{j}_{valor}")])
             
-
+            # adiciona as cláusulas do estado final (meta)
             cnf.extend(estado_final(N, simbolo))
 
             solver = Solver()
@@ -78,20 +81,23 @@ def resolver_puzzle(estado_inicial, MAX_PASSOS):
                 return modelo, N
         return None, None
 
-
+# interpreta o modelo retornado pelo solver, convertendo para estados e ações
 def interpretar_modelo(modelo, mapeamento):
-    estados = defaultdict(lambda: [[" "]*3 for _ in range(3)])
+    def estado_vazio():
+        return [[" "]*3 for _ in range(3)]
+    
+    estados = defaultdict(estado_vazio)
     acoes = {}
 
     for nome, codigo in mapeamento.items():
         if codigo in modelo:
             if "_P_" in nome:
-                # Ex: "3_P_2_1_4"
+                # ex: "3_P_2_1_4"
                 k, _, i, j, v = nome.split("_")
                 estados[int(k)][int(i)-1][int(j)-1] = v
 
             elif "_A_" in nome:
-                # Ex: "2_A_C"
+                # ex: "2_A_C"
                 k, _, direcao = nome.split("_")
                 acoes[int(k)] = direcao
 

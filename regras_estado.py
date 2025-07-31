@@ -1,5 +1,3 @@
-# Gerar todas as cláusulas lógicas que garantem duas regras básicas para o tabuleiro no estado p:
-
 def regras_estado(p, simbolo):
     clausulas = []     # lista de int p/ armazenar cláusulas
 
@@ -25,10 +23,10 @@ def regras_estado(p, simbolo):
     
     simbolos_zero = [simbolo(f"{p}_P_{i}_{j}_0") for i in range(1, 4) for j in range(1, 4)]
 
-    # Pelo menos uma posição tem o 0
+    # pelo menos uma posição tem o 0
     clausulas.append(simbolos_zero)
 
-    # No máximo uma (pares negativos)
+    # no máximo uma (pares negativos)
     for i in range(len(simbolos_zero)):
         for j in range(i + 1, len(simbolos_zero)):
             clausulas.append([-simbolos_zero[i], -simbolos_zero[j]])
